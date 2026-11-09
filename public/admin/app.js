@@ -19,16 +19,39 @@ function showToast(msg, type='') {
   setTimeout(() => { t.classList.remove('show'); }, 3000);
 }
 
+// Short-lived GET cache + in-flight request deduplication keeps tab switches snappy.
+const ADMIN_GET_CACHE_TTL = 8000;
+const adminGetCache = new Map();
+const adminGetPending = new Map();
+
 async function apiFetch(url, opts={}) {
-  const headers = { 'Content-Type': 'application/json', ...(opts.headers || {}) };
-  const r = await fetch(url, { credentials: 'same-origin', ...opts, headers });
-  const raw = await r.text();
-  let data = {};
-  try { data = raw ? JSON.parse(raw) : {}; } catch (_) {
-    throw new Error('Admin service is temporarily unavailable. Please try again.');
+  const method = (opts.method || 'GET').toUpperCase();
+  const cacheKey = method === 'GET' ? url : null;
+  if (cacheKey) {
+    const cached = adminGetCache.get(cacheKey);
+    if (cached && Date.now() - cached.time < ADMIN_GET_CACHE_TTL) return cached.data;
+    if (adminGetPending.has(cacheKey)) return adminGetPending.get(cacheKey);
+  } else {
+    // Mutations invalidate cached dashboard/order data immediately.
+    adminGetCache.clear();
   }
-  if (!r.ok) throw new Error(data.error || 'Request failed');
-  return data;
+
+  const request = (async () => {
+    const headers = { 'Content-Type': 'application/json', ...(opts.headers || {}) };
+    const r = await fetch(url, { credentials: 'same-origin', ...opts, headers });
+    const raw = await r.text();
+    let data = {};
+    try { data = raw ? JSON.parse(raw) : {}; } catch (_) {
+      throw new Error('Admin service is temporarily unavailable. Please try again.');
+    }
+    if (!r.ok) throw new Error(data.error || 'Request failed');
+    if (cacheKey) adminGetCache.set(cacheKey, { data, time: Date.now() });
+    return data;
+  })();
+
+  if (cacheKey) adminGetPending.set(cacheKey, request);
+  try { return await request; }
+  finally { if (cacheKey) adminGetPending.delete(cacheKey); }
 }
 
 function destroyChart(key) {
@@ -215,7 +238,7 @@ async function renderOverview() {
              datasets:[{data:[d.ordersDone,d.ordersProcessing,d.ordersPending,d.ordersCancelled],
                         backgroundColor:['#22c55e','#4f7cf6','#f97316','#ef4444'],
                         borderWidth:0,hoverOffset:6}]},
-      options:{ cutout:'72%', plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed}`}} }, animation:{animateRotate:true} }
+      options:{ cutout:'72%', plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>` ${c.label}: ${c.parsed}`}} }, animation:false }
     });
   } catch(e) {
     el.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><h3>Failed to load</h3><p>${e.message}</p></div>`;
@@ -260,7 +283,7 @@ function buildOvChart(data, period) {
       }]
     },
     options:{
-      responsive:true, maintainAspectRatio:false,
+      responsive:true, maintainAspectRatio:false, animation:false,
       plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>'  '+fmt(c.parsed.y)}} },
       scales:{
         x:{ grid:{display:false}, ticks:{font:{size:11},color:'#9ca3af'} },
@@ -554,7 +577,7 @@ async function loadRevenue() {
         }]
       },
       options:{
-        responsive:true, maintainAspectRatio:false,
+        responsive:true, maintainAspectRatio:false, animation:false,
         plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>'  '+fmt(c.parsed.y)}} },
         scales:{
           x:{ grid:{display:false}, ticks:{font:{size:11},color:'#9ca3af'} },
@@ -623,7 +646,7 @@ async function loadProfit() {
         ]
       },
       options:{
-        responsive:true, maintainAspectRatio:false,
+        responsive:true, maintainAspectRatio:false, animation:false,
         plugins:{ legend:{position:'top',labels:{font:{size:12},boxWidth:12}}, tooltip:{callbacks:{label:c=>`  ${c.dataset.label}: ${fmt(c.parsed.y)}`}} },
         scales:{
           x:{ grid:{display:false}, ticks:{font:{size:11},color:'#9ca3af'} },
