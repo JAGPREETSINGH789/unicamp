@@ -732,8 +732,129 @@ body.dark-mode .printing-entry .printing-kicker,.dark-mode .print-bubble{backgro
 body.dark-mode .printing-entry h2{color:#f8fafc}.dark-mode .printing-entry p{color:#9fb0c7}.dark-mode .printing-entry-btn{box-shadow:0 8px 20px rgba(37,99,235,.22)}
 @media(max-width:900px){.hero-split{grid-template-columns:1fr}.hero-campus{border-radius:22px 22px 0 0}.printing-entry{border-radius:0 0 22px 22px;min-height:300px}.hero-panel{min-height:320px}.hero-split .hero-art{right:0}.printing-entry-art{width:250px}}
 @media(max-width:700px){.hero-split{display:block!important}.hero-campus{border-radius:22px 22px 0 0;min-height:390px;padding:25px}.hero-split .hero-content{max-width:72%}.hero-split .hero-art{right:-80px;top:auto;bottom:-20px;transform:none;opacity:.95}.printing-entry{padding:25px 22px;min-height:320px;display:block;border-radius:0 0 22px 22px}.printing-entry-copy{max-width:100%}.printing-entry h2{font-size:24px}.printing-entry-art{width:100%;height:150px;margin-top:10px}.printing-entry-art .printer-illustration{transform:scale(.78)}.printing-entry-art .print-bubble{font-size:10px}}
+
+/* ===== REQUESTED UI REFINEMENTS ===== */
+/* Keep the split hero visually compact instead of spanning the full page width. */
+.hero-split{
+  width:min(1180px,calc(100% - 40px))!important;
+  max-width:1180px!important;
+  min-height:320px!important;
+  margin:18px auto 26px!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+}
+.hero-panel{min-height:320px!important;padding:30px 30px!important;}
+.hero-split .hero-content{max-width:56%!important;}
+.hero-split .hero-art{right:12px!important;max-width:44%;}
+.printing-entry{min-height:320px!important;}
+@media(max-width:900px){
+  .hero-split{width:calc(100% - 28px)!important;grid-template-columns:1fr!important;}
+  .hero-panel{min-height:290px!important;}
+}
+
+/* Category cards use real category-specific photos with a readable dark overlay. */
+.categories{grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;}
+.category{
+  min-height:145px!important;
+  padding:18px!important;
+  color:#fff!important;
+  background-size:cover!important;
+  background-position:center!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  isolation:isolate;
+}
+.category::before{
+  content:"";position:absolute;inset:0;z-index:0;
+  background:linear-gradient(0deg,rgba(8,22,17,.86),rgba(8,22,17,.12) 85%);
+  pointer-events:none;
+}
+.category>*{position:relative;z-index:1;}
+.category:nth-child(1){background-image:url('/assets/images/category-stationery.jpg')!important;}
+.category:nth-child(2){background-image:url('/assets/images/category-gym.jpg')!important;}
+.category:nth-child(3){background-image:url('/assets/images/category-hostel.jpg')!important;}
+.category:nth-child(4){background-image:url('/assets/images/category-laptop.jpg')!important;}
+.category-icon{font-size:34px!important;margin-bottom:14px!important;}
+.category h3{color:#fff!important;font-size:15px!important;}
+.category p{color:#f1f5f1!important;}
+.category-arrow{background:#fff;color:#145b43;border-radius:50%;width:36px;height:36px;display:grid;place-items:center;}
+@media(max-width:700px){
+  .categories{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .category{min-height:130px!important;}
+}
+
+/* Sign-in and checkout are dedicated full-screen pages, not centered pop-up cards. */
+.fullscreen-flow{
+  position:fixed!important;inset:0!important;z-index:5000!important;
+  display:none;align-items:stretch!important;justify-content:stretch!important;
+  width:100vw!important;height:100dvh!important;max-height:100dvh!important;
+  overflow-y:auto!important;padding:0!important;
+  background:var(--bg,#f7f7f2)!important;
+}
+.fullscreen-flow.open{display:flex!important;}
+.fullscreen-flow .modal-inner{
+  width:100%!important;max-width:none!important;height:100%!important;
+  max-height:none!important;min-height:100dvh!important;border-radius:0!important;
+  box-shadow:none!important;overflow:visible!important;background:var(--card,#fff)!important;
+}
+.fullscreen-flow .modal-header{
+  position:sticky;top:0;z-index:2;background:var(--card,#fff);
+  padding:18px clamp(18px,5vw,64px)!important;
+}
+.fullscreen-flow .modal-body{
+  width:min(760px,100%);margin:0 auto;padding:28px clamp(18px,5vw,48px)!important;
+  overflow:visible!important;flex:1;
+}
+.auth-fullscreen .modal-body{width:min(620px,100%);}
+.checkout-fullscreen .modal-body{width:min(760px,100%);}
+body.modal-lock{overflow:hidden;}
+
+/* Complete dark theme for page sections, forms, drawers, and full-screen flows. */
+body.dark-mode{
+  --bg:#0b1220;--card:#111c2e;--text:#e5edf7;--muted:#9aa9bd;
+  --border:#29384e;--green:#31a36b;
+  background:#0b1220!important;color:#e5edf7!important;
+}
+body.dark-mode .hero-campus,
+body.dark-mode .printing-entry,
+body.dark-mode .category-intro-box,
+body.dark-mode .offer-banner,
+body.dark-mode .newsletter,
+body.dark-mode .section-head,
+body.dark-mode .product-grid,
+body.dark-mode .products-toolbar,
+body.dark-mode .store-main,
+body.dark-mode main{
+  color:#e5edf7;
+}
+body.dark-mode .hero-campus{background:linear-gradient(135deg,#1a3028,#203d32)!important;border-color:#355b47!important;}
+body.dark-mode .hero-campus h1,body.dark-mode .hero-campus p,
+body.dark-mode .printing-entry h2,body.dark-mode .printing-entry p{color:#edf5ef!important;}
+body.dark-mode .category-intro-box,body.dark-mode .offer-banner,
+body.dark-mode .newsletter,body.dark-mode .product-card,
+body.dark-mode .cart-drawer,body.dark-mode .cart-drawer-footer,
+body.dark-mode .quick-view-content,body.dark-mode .account-card,
+body.dark-mode .payment-option-card,body.dark-mode .modal-inner,
+body.dark-mode .fullscreen-flow,body.dark-mode .fullscreen-flow .modal-header,
+body.dark-mode .fullscreen-flow .modal-body{
+  background:#111c2e!important;color:#e5edf7!important;border-color:#29384e!important;
+}
+body.dark-mode input,body.dark-mode select,body.dark-mode textarea,
+body.dark-mode .sort-select,body.dark-mode .search-input,
+body.dark-mode .form-control{
+  background:#0b1526!important;color:#e5edf7!important;border-color:#34445b!important;
+}
+body.dark-mode input::placeholder,body.dark-mode textarea::placeholder{color:#8292a8!important;}
+body.dark-mode h1,body.dark-mode h2,body.dark-mode h3,body.dark-mode h4,
+body.dark-mode label,body.dark-mode .section-head p,
+body.dark-mode .product-title,body.dark-mode .product-name,
+body.dark-mode .cart-item-title,body.dark-mode .cart-summary-line{
+  color:#e5edf7;
+}
+body.dark-mode .modal-backdrop{background:rgba(0,0,0,.72)!important;}
+body.dark-mode .cart-drawer{background:#0f172a!important;}
+body.dark-mode .footer,body.dark-mode footer{background:#0d1728!important;color:#b9c6d8!important;}
+body.dark-mode .theme-toggle{background:#20324a!important;color:#f8fafc!important;border-color:#3b4d66!important;}
+
 </style>
-<link rel="stylesheet" href="/replit-theme.css">
 </head>
 
 <body>
@@ -1128,7 +1249,7 @@ body.dark-mode .printing-entry h2{color:#f8fafc}.dark-mode .printing-entry p{col
 
 
 <!-- AUTH MODAL -->
-<div id="authModal" class="modal-container" role="dialog">
+<div id="authModal" class="modal-container fullscreen-flow auth-fullscreen" role="dialog" aria-modal="true">
   <div class="modal-inner">
     <div class="modal-header">
       <h3>Student Portal Login &amp; Register</h3>
@@ -1197,7 +1318,7 @@ body.dark-mode .printing-entry h2{color:#f8fafc}.dark-mode .printing-entry p{col
 
 
 <!-- CHECKOUT MODAL (multi-step: delivery → payment → success) -->
-<div id="checkoutModal" class="modal-container" role="dialog">
+<div id="checkoutModal" class="modal-container fullscreen-flow checkout-fullscreen" role="dialog" aria-modal="true">
   <div class="modal-inner" style="max-width:640px;">
     <div class="modal-header">
       <h3>Complete Order Booking</h3>
