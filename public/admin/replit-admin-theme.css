@@ -1,0 +1,14 @@
+/* Shared Replit-inspired admin theme; all original dashboard actions/API hooks remain intact */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+:root{--green:#245f4b;--green2:#317353;--cream:#f5f2e9;--paper:#fbf9f3;--ink:#202b3d;--muted:#778078;--line:#e7e0d3}
+body{font-family:'DM Sans',sans-serif!important;background:var(--cream)!important;color:var(--ink)!important}
+#login-screen{background:radial-gradient(circle at 80% 12%,#e1ebdf,transparent 32%),var(--cream)!important}
+.login-card,.panel,.stat-card,.content-card,.table-wrap,.modal-content,.card,.widget,.chart-card{background:var(--paper)!important;border:1px solid var(--line)!important;border-radius:17px!important;box-shadow:0 8px 24px rgba(32,43,61,.045)!important}
+.sidebar,.topbar,.header,.navbar{background:#faf8f1!important;border-color:var(--line)!important;box-shadow:0 4px 18px rgba(32,43,61,.04)!important}
+.sidebar-logo-text,.page-title,.topbar h1,.login-title,h1,h2,h3{font-family:Manrope,sans-serif!important;color:var(--ink)!important}
+.nav-item{border-radius:11px!important;color:#5e6a68!important}.nav-item.active,.nav-item:hover{background:#e5eee3!important;color:var(--green)!important}
+.btn-primary,.primary-btn,.action-btn,.save-btn,.submit-btn{background:var(--green)!important;border-color:var(--green)!important;color:#fff!important;border-radius:999px!important}
+button,.btn,.logout-btn{border-radius:10px}input,select,textarea,.form-control{background:#fffdf8!important;border:1px solid #ded8cb!important;border-radius:10px!important;color:var(--ink)!important}
+.badge,.status-badge{border-radius:999px!important}.stat-value,.metric-value{color:var(--green)!important}
+table{border-color:var(--line)!important}th{background:#f0eee5!important;color:#63716b!important}td{border-color:#eee9df!important}
+@media(max-width:700px){.sidebar{background:#faf8f1!important}.main,.content{background:var(--cream)!important}}

@@ -1,0 +1,127 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UniCampus Printing Operator</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,Arial;background:#f5f7fb;color:#172033}button,input,select{font:inherit}button{cursor:pointer}.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#eef5ff,#f7fafc)}.loginbox{width:min(420px,100%);background:#fff;border:1px solid #e2e8f0;border-radius:20px;padding:30px;box-shadow:0 20px 50px rgba(15,23,42,.1)}.brand{font-size:22px;font-weight:900;margin-bottom:5px}.brand span{color:#1674df}.sub{font-size:12px;color:#7a8799;margin-bottom:24px}.field{margin-bottom:14px}.field label{display:block;font-size:11px;font-weight:800;margin-bottom:6px}.field input{width:100%;padding:11px;border:1px solid #dce3ec;border-radius:9px}.btn{width:100%;padding:11px;border:0;border-radius:9px;background:#1674df;color:#fff;font-weight:800}.err{display:none;color:#c6283d;background:#fff1f2;padding:9px;border-radius:8px;font-size:12px;margin-top:10px}.err.show{display:block}.app{display:none}.app.on{display:block}.top{height:70px;background:#fff;border-bottom:1px solid #e5eaf1;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:10}.logout{border:1px solid #e1e7ef;background:#fff;padding:9px 13px;border-radius:9px;font-weight:700}.wrap{max-width:1450px;margin:auto;padding:24px}.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:20px}.page-head h1{font-size:26px;letter-spacing:-.7px}.page-head p{font-size:12px;color:#7a8799;margin-top:5px}.periods{display:flex;gap:7px;background:#eef2f7;padding:5px;border-radius:12px}.period{border:0;background:transparent;padding:8px 12px;border-radius:8px;font-size:11px;font-weight:900;color:#65748b}.period.active{background:#fff;color:#1674df;box-shadow:0 2px 7px rgba(15,23,42,.08)}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:20px}.stat{background:#fff;border:1px solid #e2e8f0;border-radius:15px;padding:17px}.stat-label{font-size:10px;color:#7a8799;font-weight:800;text-transform:uppercase;letter-spacing:.5px}.stat-value{font-size:25px;font-weight:900;margin-top:8px;color:#14243b}.stat-sub{font-size:10px;color:#8995a7;margin-top:5px}.stat.green .stat-value{color:#168b3c}.stat.blue .stat-value{color:#1674df}.stat.orange .stat-value{color:#c97900}.stat.purple .stat-value{color:#7854c8}
+.panel{background:#fff;border:1px solid #e2e8f0;border-radius:15px;padding:18px;margin-bottom:20px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:14px}.panel-head h2{font-size:17px}.panel-head p{font-size:11px;color:#7a8799;margin-top:3px}.refresh{border:0;background:#111827;color:#fff;padding:9px 13px;border-radius:9px;font-weight:800;font-size:11px}.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}.filter{border:0;background:#eef2f7;padding:8px 12px;border-radius:999px;font-size:10px;font-weight:900;color:#52627a}.filter.active{background:#1674df;color:#fff}.orders{display:grid;gap:10px}.order{background:#fbfcfe;border:1px solid #e5eaf1;border-radius:13px;padding:15px;display:grid;grid-template-columns:1.15fr 1fr 1.2fr .75fr auto;gap:15px;align-items:center}.order h3{font-size:13px;margin-bottom:5px}.meta{font-size:10px;color:#718096;line-height:1.75}.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#eaf2ff;color:#1674df;font-size:9px;font-weight:900}.badge.paid{background:#eaf9ef;color:#168b3c}.badge.unpaid{background:#fff5df;color:#ad6a00}.actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.actions button,.download{border:0;border-radius:8px;padding:8px 9px;font-size:9px;font-weight:900;background:#eef2f7;color:#27364d;text-decoration:none}.actions .primary{background:#1674df;color:#fff}.actions .paid{background:#168b3c;color:#fff}.empty{background:#fff;border:1px dashed #d7dee8;border-radius:14px;padding:45px;text-align:center;color:#7a8799;font-size:12px}
+.service-panel{background:#fff;border:1px solid #e2e8f0;border-radius:15px;padding:18px;margin-bottom:20px}.service-list{display:grid;gap:9px}.service-row{display:grid;grid-template-columns:45px 1.25fr 100px 100px 105px 1.5fr 80px 70px 70px;gap:7px;align-items:center;padding:10px;border:1px solid #e7ecf2;border-radius:11px}.service-row input,.service-row select{width:100%;padding:8px;border:1px solid #dce3ec;border-radius:7px;background:#fff;font-size:10px}.service-row .icon-input{text-align:center;font-size:18px}.service-row button{border:0;border-radius:8px;padding:8px 6px;font-size:9px;font-weight:900}.service-row .save{background:#1674df;color:#fff}.service-row .toggle{background:#eef2f7;color:#27364d}.service-row .delete{background:#fff0f2;color:#c6283d}.add-service{display:grid;grid-template-columns:45px 1.25fr 110px 105px 1.5fr 180px 85px;gap:7px;margin-top:11px}.add-service input,.add-service select{width:100%;padding:8px;border:1px solid #dce3ec;border-radius:7px;font-size:10px}.add-service button{border:0;border-radius:8px;background:#111827;color:#fff;font-size:9px;font-weight:900;padding:8px}.service-msg{font-size:10px;margin-top:9px;color:#1674df}.service-title{margin-bottom:13px}.service-title h2{font-size:17px}.service-title p{font-size:11px;color:#7a8799;margin-top:4px}
+@media(max-width:1150px){.stats{grid-template-columns:repeat(3,1fr)}.order{grid-template-columns:1fr 1fr}.service-row{grid-template-columns:40px 1fr 90px 90px 1fr 70px 65px 65px}.add-service{grid-template-columns:40px 1fr 90px 90px 1fr 140px 80px}}@media(max-width:700px){.top{padding:0 14px}.wrap{padding:14px}.page-head{display:block}.periods{margin-top:12px;width:max-content;max-width:100%;overflow:auto}.stats{grid-template-columns:1fr 1fr}.order{grid-template-columns:1fr}.actions{justify-content:flex-start}.service-row,.add-service{grid-template-columns:1fr}.service-row input,.service-row select,.service-row button,.add-service input,.add-service select,.add-service button{width:100%}.stats .stat{padding:13px}.stat-value{font-size:21px}}
+
+
+/* GLOBAL DARK MODE - default dark, toggle to light */
+body.dark-mode{background:#05070b!important;color:#f8fafc!important}
+body.dark-mode .login{background:linear-gradient(135deg,#05070b,#0b1220)!important}
+body.dark-mode .loginbox{background:#0f1724!important;border-color:#263244!important;color:#f8fafc!important}
+body.dark-mode .sub,body.dark-mode .page-head p,body.dark-mode .panel-head p,body.dark-mode .service-title p{color:#94a3b8!important}
+body.dark-mode .field input{background:#111827!important;color:#f8fafc!important;border-color:#334155!important}
+body.dark-mode .top{background:#0b0f17!important;border-color:#1f2937!important}
+body.dark-mode .logout{background:#111827!important;color:#f8fafc!important;border-color:#334155!important}
+body.dark-mode .periods{background:#111827!important}
+body.dark-mode .period{color:#94a3b8!important}
+body.dark-mode .period.active{background:#1f2937!important;color:#60a5fa!important}
+body.dark-mode .stat,body.dark-mode .panel,body.dark-mode .service-panel,body.dark-mode .order,body.dark-mode .empty,body.dark-mode .service-row{background:#0f1724!important;border-color:#263244!important;color:#e2e8f0!important}
+body.dark-mode .stat-label,body.dark-mode .stat-sub,body.dark-mode .meta{color:#94a3b8!important}
+body.dark-mode .stat-value{color:#f8fafc!important}
+body.dark-mode .service-row input,body.dark-mode .service-row select,body.dark-mode .add-service input,body.dark-mode .add-service select{background:#111827!important;color:#f8fafc!important;border-color:#334155!important}
+body.dark-mode .filters .filter{background:#111827!important;color:#cbd5e1!important}
+body.dark-mode .filters .filter.active{background:#1674df!important;color:#fff!important}
+body.dark-mode .actions button,body.dark-mode .download{background:#1f2937!important;color:#e2e8f0!important}
+body.dark-mode .theme-toggle{background:#111827!important;color:#f8fafc!important;border-color:#334155!important}
+
+.theme-toggle{border:1px solid #dce3ec;background:#fff;color:#111827;border-radius:9px;padding:9px 11px;font-weight:800;cursor:pointer;margin-right:8px}
+.order .actions .delete{background:#fff1f2;color:#c6283d;border:1px solid #ffd5db}.svc-cost{border:1px solid #dce3ec;border-radius:8px;padding:8px;font-size:11px;width:100px}
+</style><link rel="stylesheet" href="/replit-printing-theme.css">
+</head><body class="dark-mode">
+<section class="login" id="login"><div class="loginbox"><div class="brand">Uni<span>Campus</span> Printing</div><div class="sub">Authorized printing operator portal</div><div class="field"><label>USERNAME</label><input id="username" value="print" autocomplete="username"></div><div class="field"><label>PASSWORD</label><input id="password" type="password" autocomplete="current-password"></div><button class="btn" id="loginBtn" onclick="login()">Sign In</button><div class="err" id="err"></div></div></section>
+<section class="app" id="app"><div class="top"><div><b>🖨️ UniCampus Printing</b><div style="font-size:10px;color:#7a8799;margin-top:3px">Operator Dashboard</div></div><button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Switch to light mode">☀️</button><button class="logout" onclick="logout()">Log Out</button></div>
+<main class="wrap">
+<div class="page-head"><div><h1>Printing Dashboard</h1><p>Monitor earnings, orders, payments and completion from one place.</p></div><div class="periods"><button class="period active" data-range="today">Today</button><button class="period" data-range="30d">Last 30 Days</button><button class="period" data-range="all">All Time</button></div></div>
+<div class="stats"><div class="stat green"><div class="stat-label">Earnings</div><div class="stat-value" id="earnings">₹0</div><div class="stat-sub">Non-cancelled orders</div></div><div class="stat blue"><div class="stat-label">Orders</div><div class="stat-value" id="orderCount">0</div><div class="stat-sub">Orders in selected period</div></div><div class="stat orange"><div class="stat-label">Paid</div><div class="stat-value" id="paidCount">0</div><div class="stat-sub" id="paidAmount">₹0 collected</div></div><div class="stat purple"><div class="stat-label">Completed</div><div class="stat-value" id="completedCount">0</div><div class="stat-sub">Successfully completed</div></div><div class="stat green"><div class="stat-label">Profit</div><div class="stat-value" id="profitAmount">₹0</div><div class="stat-sub" id="costAmount">₹0 cost</div></div><div class="stat"><div class="stat-label">All Orders</div><div class="stat-value" id="allCount">0</div><div class="stat-sub">Including cancelled</div></div></div>
+<section class="panel"><div class="panel-head"><div><h2>Orders</h2><p id="periodText">Today's printing orders</p></div><button class="refresh" onclick="refreshAll()">↻ Refresh</button></div><div class="filters"><button class="filter active" data-status="">All</button><button class="filter" data-status="Received">New</button><button class="filter" data-status="Accepted">Accepted</button><button class="filter" data-status="Printing">Printing</button><button class="filter" data-status="Ready">Ready</button><button class="filter" data-status="Completed">Completed</button><button class="filter" data-status="Cancelled">Cancelled</button></div><div class="orders" id="orders"></div></section>
+<section class="service-panel"><div class="service-title"><h2>Printing Services & Pricing</h2><p>Edit service name, price, billing type, description and active status. Changes appear on the student printing page.</p></div><div class="service-list" id="serviceList"><div class="empty">Loading services…</div></div><div class="add-service"><input id="newIcon" value="🖨️" maxlength="4" placeholder="Icon"><input id="newName" placeholder="Service name"><input id="newRate" type="number" min="0" step="0.01" placeholder="Price"><input id="newCost" type="number" min="0" step="0.01" placeholder="Cost"><select id="newBilling"><option value="0">Per page</option><option value="1">Per service</option></select><input id="newDesc" placeholder="Short description"><input id="newId" placeholder="ID e.g. color-print"><button onclick="addService()">+ Add Service</button></div><div class="service-msg" id="serviceMsg"></div></section>
+</main></section>
+<script>
+let range='today',filter='';
+async function api(url,opt={}){const r=await fetch(url,{credentials:'same-origin',...opt,headers:{'Content-Type':'application/json',...(opt.headers||{})}});const t=await r.text();let d={};try{d=t?JSON.parse(t):{}}catch{throw Error('Server returned an invalid response')}if(!r.ok)throw Error(d.error||'Request failed');return d}
+const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+async function login(){const err=document.getElementById('err'),btn=document.getElementById('loginBtn');err.className='err';btn.disabled=true;try{await api('/api/printing/login',{method:'POST',body:JSON.stringify({username:username.value.trim(),password:password.value})});document.getElementById('login').style.display='none';document.getElementById('app').classList.add('on');await refreshAll()}catch(e){err.textContent=e.message;err.className='err show'}finally{btn.disabled=false}}
+async function logout(){try{await api('/api/printing/logout',{method:'POST'})}catch{}document.getElementById('app').classList.remove('on');document.getElementById('login').style.display='flex';password.value=''}
+async function loadDashboard(){const d=await api('/api/printing/dashboard?range='+encodeURIComponent(range));earnings.textContent='₹'+Number(d.summary.earnings||0).toLocaleString('en-IN');orderCount.textContent=d.summary.orders;paidCount.textContent=d.summary.paid;paidAmount.textContent='₹'+Number(d.summary.paidAmount||0).toLocaleString('en-IN')+' collected';completedCount.textContent=d.summary.completed;profitAmount.textContent='₹'+Number(d.summary.profit||0).toLocaleString('en-IN');costAmount.textContent='₹'+Number(d.summary.cost||0).toLocaleString('en-IN')+' cost';const allD=await api('/api/printing/dashboard?range=all');allCount.textContent=allD.summary.orders;periodText.textContent=range==='today'?'Today\'s printing orders':range==='30d'?'Last 30 days printing orders':'All printing orders'}
+async function loadOrders(){const el=document.getElementById('orders');el.innerHTML='<div class="empty">Loading orders…</div>';try{const q=new URLSearchParams({range});if(filter)q.set('status',filter);const d=await api('/api/printing/orders?'+q.toString());if(!d.orders.length){el.innerHTML='<div class="empty">No printing orders in this view.</div>';return}el.innerHTML=d.orders.map(o=>{const next=o.status==='Received'?'Accepted':o.status==='Accepted'?'Printing':o.status==='Printing'?'Ready':o.status==='Ready'?'Completed':null;const paid=o.payment_status==='Paid';return `<article class="order"><div><h3>${esc(o.id)}</h3><span class="badge">${esc(o.status)}</span><div class="meta">${new Date(o.created_at).toLocaleString('en-IN')}</div></div><div><b>${esc(o.student_name)}</b><div class="meta">${esc(o.student_uid||'')}<br>${esc(o.student_email)}<br>${esc(o.student_phone||'')}</div></div><div><b>${esc(o.service_name)}</b><div class="meta">${esc(o.file_name)}<br>${o.pages} page(s) · ${o.copies} copy/copies<br>${esc(o.print_type)} · ${esc(o.paper_size)} · ${esc(o.binding)}</div></div><div><strong>₹${Number(o.amount||0).toLocaleString('en-IN')}</strong><div class="meta">Cost ₹${Number(o.cost||0).toLocaleString('en-IN')} · Profit ₹${Math.max(0,Number(o.amount||0)-Number(o.cost||0)).toLocaleString('en-IN')}</div><div style="margin-top:6px"><span class="badge ${paid?'paid':'unpaid'}">${paid?'PAID':'UNPAID'}</span></div></div><div class="actions"><a class="download" href="/api/printing/orders/${encodeURIComponent(o.id)}/file">⬇ File</a><button class="${paid?'':'paid'}" onclick="setPayment('${esc(o.id)}','${paid?'Unpaid':'Paid'}')">${paid?'Mark Unpaid':'Mark Paid'}</button>${next?`<button class="primary" onclick="setStatus('${esc(o.id)}','${next}')">${next}</button>`:''}<button onclick="setStatus('${esc(o.id)}','Cancelled')">Cancel</button><button class="delete" onclick="deleteOrder('${esc(o.id)}')">Delete</button></div></article>`}).join('')}catch(e){el.innerHTML='<div class="empty">'+esc(e.message)+'</div>'}}
+async function setStatus(id,status){try{await api('/api/printing/orders/'+encodeURIComponent(id)+'/status',{method:'PATCH',body:JSON.stringify({status})});await refreshAll()}catch(e){alert(e.message)}}
+async function setPayment(id,payment_status){try{await api('/api/printing/orders/'+encodeURIComponent(id)+'/payment',{method:'PATCH',body:JSON.stringify({payment_status})});await refreshAll()}catch(e){alert(e.message)}}
+async function deleteOrder(id){if(!confirm('Delete this printing order? This cannot be undone.'))return;try{await api('/api/printing/orders/'+encodeURIComponent(id),{method:'DELETE'});await refreshAll()}catch(e){alert(e.message)}}
+async function loadServices(){const el=document.getElementById('serviceList');el.innerHTML='<div class="empty">Loading services…</div>';try{const d=await api('/api/printing/services/manage');el.innerHTML=(d.services||[]).map(serviceRow).join('')||'<div class="empty">No services found.</div>'}catch(e){el.innerHTML='<div class="empty">'+esc(e.message)+'</div>'}}
+function serviceRow(s){return `<div class="service-row" data-id="${esc(s.id)}"><input class="icon-input svc-icon" value="${esc(s.icon||'🖨️')}" maxlength="4"><input class="svc-name" value="${esc(s.name)}"><input class="svc-rate" type="number" min="0" step="0.01" value="${Number(s.pageRate)||0}" title="Selling price"><input class="svc-cost" type="number" min="0" step="0.01" value="${Number(s.cost)||0}" placeholder="Cost" title="Cost price"><select class="svc-flat"><option value="0" ${!s.flat?'selected':''}>Per page</option><option value="1" ${s.flat?'selected':''}>Per service</option></select><input class="svc-desc" value="${esc(s.description||'')}"><button class="toggle" onclick="toggleService('${esc(s.id)}',${s.active?'false':'true'})">${s.active?'Active':'Disabled'}</button><button class="save" onclick="saveService('${esc(s.id)}')">Save</button><button class="delete" onclick="deleteService('${esc(s.id)}')">Delete</button></div>`}
+async function saveService(id){const row=document.querySelector('.service-row[data-id="'+CSS.escape(id)+'"]');if(!row)return;try{await api('/api/printing/services/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({icon:row.querySelector('.svc-icon').value,name:row.querySelector('.svc-name').value,pageRate:row.querySelector('.svc-rate').value,cost:row.querySelector('.svc-cost').value,flat:row.querySelector('.svc-flat').value==='1',description:row.querySelector('.svc-desc').value})});document.getElementById('serviceMsg').textContent='Service saved successfully.';await loadServices()}catch(e){document.getElementById('serviceMsg').textContent=e.message}}
+async function toggleService(id,active){try{await api('/api/printing/services/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({active})});await loadServices()}catch(e){alert(e.message)}}
+async function deleteService(id){if(!confirm('Delete this printing service?'))return;try{await api('/api/printing/services/'+encodeURIComponent(id),{method:'DELETE'});await loadServices()}catch(e){alert(e.message)}}
+async function addService(){try{await api('/api/printing/services',{method:'POST',body:JSON.stringify({id:newId.value.trim(),name:newName.value.trim(),pageRate:newRate.value,cost:newCost.value,flat:newBilling.value==='1',description:newDesc.value.trim(),icon:newIcon.value.trim()||'🖨️',active:true})});newId.value='';newName.value='';newRate.value='';newCost.value='';newDesc.value='';document.getElementById('serviceMsg').textContent='Service added successfully.';await loadServices()}catch(e){document.getElementById('serviceMsg').textContent=e.message}}
+async function refreshAll(){await Promise.all([loadDashboard(),loadOrders(),loadServices()])}
+document.querySelectorAll('.period').forEach(b=>b.onclick=()=>{document.querySelectorAll('.period').forEach(x=>x.classList.remove('active'));b.classList.add('active');range=b.dataset.range;refreshAll()});document.querySelectorAll('.filter').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');filter=b.dataset.status;loadOrders()});
+api('/api/printing/me').then(()=>{document.getElementById('login').style.display='none';document.getElementById('app').classList.add('on');refreshAll()}).catch(()=>{});
+</script>
+<script>
+(function(){
+  const key='unicampus_theme';
+  function apply(){
+    const light=localStorage.getItem(key)==='light';
+    document.body.classList.toggle('dark-mode',!light);
+    const b=document.getElementById('themeToggle');
+    if(b){b.textContent=light?'🌙':'☀️';b.title=light?'Switch to dark mode':'Switch to light mode';}
+  }
+  window.toggleTheme=function(){
+    const dark=!document.body.classList.contains('dark-mode');
+    localStorage.setItem(key,dark?'dark':'light');apply();
+  };
+  document.addEventListener('DOMContentLoaded',apply);
+})();
+</script>
+
+</body></html>
+
+<style id="admin-mobile-polish">
+@media(max-width:700px){
+  body{overflow-x:hidden}
+  .top{height:56px;padding:0 11px;gap:7px}
+  .top>div:first-child b{font-size:12px}.top>div:first-child div{font-size:8px!important}
+  .logout{padding:7px 9px;font-size:9px;border-radius:8px}
+  .theme-toggle{padding:7px 8px;font-size:11px;margin-left:auto;margin-right:0;border-radius:8px}
+  .wrap{padding:12px 10px 28px}
+  .page-head{margin-bottom:14px}
+  .page-head h1{font-size:21px;letter-spacing:-.5px}
+  .page-head p{font-size:9px;line-height:1.45;max-width:280px}
+  .periods{width:100%;margin-top:10px;overflow-x:auto;display:flex;padding:4px;border-radius:9px}
+  .period{font-size:9px;padding:7px 10px;white-space:nowrap;flex:1}
+  .stats{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+  .stat{padding:12px;border-radius:11px}
+  .stat-label{font-size:8px;letter-spacing:.35px}.stat-value{font-size:19px;margin-top:5px}.stat-sub{font-size:8px;line-height:1.3}
+  .panel,.service-panel{padding:13px;border-radius:12px;margin-bottom:12px}
+  .panel-head{align-items:flex-start;margin-bottom:10px}.panel-head h2,.service-title h2{font-size:14px}.panel-head p,.service-title p{font-size:9px;line-height:1.4}
+  .refresh{padding:7px 9px;font-size:9px;border-radius:8px;white-space:nowrap}
+  .filters{gap:5px;margin-bottom:10px;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}
+  .filter{font-size:8px;padding:7px 9px;white-space:nowrap}
+  .order{grid-template-columns:1fr!important;gap:9px;padding:12px;border-radius:11px}
+  .order>div{padding-bottom:8px;border-bottom:1px solid #e7ecf2}.order>div:last-child{padding-bottom:0;border-bottom:0}
+  body.dark-mode .order>div{border-color:#263244}
+  .order h3{font-size:11px}.meta{font-size:8px;line-height:1.6}.badge{font-size:7px;padding:4px 7px}
+  .actions{gap:5px;justify-content:flex-start!important}.actions button,.download{font-size:8px;padding:7px 8px;border-radius:7px}
+  .service-title{margin-bottom:10px}
+  .service-list{gap:8px}
+  .service-row{grid-template-columns:1fr 1fr!important;gap:7px;padding:10px;border-radius:10px}
+  .service-row .icon-input{grid-column:1/-1;width:58px}
+  .service-row .svc-name{grid-column:1/-1}
+  .service-row .svc-desc{grid-column:1/-1}
+  .service-row input,.service-row select,.service-row button{min-width:0;padding:9px;font-size:9px;border-radius:7px}
+  .service-row .toggle,.service-row .save,.service-row .delete{width:100%}
+  .add-service{grid-template-columns:1fr 1fr!important;gap:7px;margin-top:9px}
+  .add-service input,.add-service select,.add-service button{padding:9px;font-size:9px;border-radius:7px}
+  .add-service input:nth-child(2),.add-service input:nth-child(6),.add-service button{grid-column:1/-1}
+  .service-msg{font-size:9px}
+  .empty{padding:30px 15px;font-size:10px}
+  .login{padding:14px}.loginbox{padding:22px;border-radius:15px}.brand{font-size:19px}.sub{font-size:9px;margin-bottom:18px}.field label{font-size:9px}.field input,.btn{font-size:11px;padding:10px}
+}
+@media(max-width:390px){
+  .stats{gap:6px}.stat{padding:10px}.stat-value{font-size:17px}.page-head h1{font-size:19px}
+  .order{padding:10px}.actions button,.download{font-size:7px;padding:6px 7px}
+}
+</style>

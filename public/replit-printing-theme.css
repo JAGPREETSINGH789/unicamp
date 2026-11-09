@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+:root{--green:#245f4b;--cream:#f5f2e9;--paper:#fbf9f3;--ink:#202b3d;--muted:#778078;--line:#e7e0d3}
+body{font-family:'DM Sans',sans-serif!important;background:var(--cream)!important;color:var(--ink)!important}
+.login,.loginbox{background:var(--cream)!important}.loginbox,.panel,.service-panel,.stat,.order,.service-row{background:var(--paper)!important;border:1px solid var(--line)!important;border-radius:16px!important;box-shadow:0 8px 24px rgba(32,43,61,.045)!important}
+.top{background:#faf8f1!important;border-color:var(--line)!important}.top b,.page-head h1,.panel-head h2,.service-title h2{font-family:Manrope,sans-serif!important;color:var(--ink)!important}
+.btn,.primary,.add-service button,.save{background:var(--green)!important;color:#fff!important;border-radius:999px!important}.periods,.filters{background:#eeece3!important}.period.active,.filter.active{background:var(--green)!important;color:#fff!important}
+input,select{background:#fffdf8!important;border:1px solid #ded8cb!important;border-radius:9px!important;color:var(--ink)!important}

@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UniCampus Admin Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* ─── RESET & TOKENS ─────────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;-webkit-font-smoothing:antialiased;}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;color:#1a1d23;min-height:100vh;}
+input,button,select,textarea{font:inherit;border:none;background:none;cursor:pointer;}
+a{text-decoration:none;color:inherit;}
+img{display:block;max-width:100%;}
+:root{
+  --blue:#4f7cf6;
+  --blue-light:#eef2ff;
+  --blue-dark:#3563e9;
+  --green:#22c55e;
+  --green-light:#dcfce7;
+  --orange:#f97316;
+  --orange-light:#fff7ed;
+  --purple:#a855f7;
+  --purple-light:#faf5ff;
+  --red:#ef4444;
+  --red-light:#fef2f2;
+  --yellow:#eab308;
+  --yellow-light:#fefce8;
+  --sidebar-w:220px;
+  --header-h:64px;
+  --white:#ffffff;
+  --surface:#f8f9fc;
+  --border:#e8eaed;
+  --border-mid:#d1d5db;
+  --text-1:#1a1d23;
+  --text-2:#4b5563;
+  --text-3:#9ca3af;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.07);
+  --shadow-md:0 4px 16px rgba(0,0,0,.08);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.12);
+  --radius-sm:8px;
+  --radius-md:12px;
+  --radius-lg:16px;
+}
+
+/* ─── LOGIN PAGE ─────────────────────────────────────────────── */
+#login-screen{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#f0f2f5 0%,#e8edf8 100%);
+}
+.login-card{
+  background:var(--white);border-radius:20px;padding:44px 40px;
+  width:100%;max-width:420px;box-shadow:var(--shadow-lg);
+}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px;}
+.login-logo-icon{width:40px;height:40px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:20px;}
+.login-logo-text{font-size:18px;font-weight:800;letter-spacing:-.5px;}
+.login-logo-text span{color:var(--blue);}
+.login-title{font-size:22px;font-weight:700;margin-bottom:6px;}
+.login-sub{color:var(--text-2);font-size:14px;margin-bottom:28px;}
+.form-group{margin-bottom:18px;}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:7px;}
+.form-control{
+  width:100%;padding:11px 14px;border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);font-size:14px;color:var(--text-1);
+  transition:border-color .15s,box-shadow .15s;background:var(--white);
+}
+.form-control:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,124,246,.12);}
+.btn-primary{
+  width:100%;padding:12px;background:var(--blue);color:white;
+  border-radius:var(--radius-sm);font-size:14px;font-weight:700;
+  cursor:pointer;transition:background .15s,transform .1s;letter-spacing:.3px;
+}
+.btn-primary:hover{background:var(--blue-dark);}
+.btn-primary:active{transform:scale(.98);}
+.form-error{color:var(--red);font-size:13px;margin-top:10px;text-align:center;display:none;}
+.form-error.show{display:block;}
+
+/* ─── APP SHELL ──────────────────────────────────────────────── */
+#app{display:none;min-height:100vh;}
+#app.active{display:flex;}
+
+/* ─── SIDEBAR ────────────────────────────────────────────────── */
+.sidebar{
+  width:var(--sidebar-w);min-height:100vh;background:var(--white);
+  border-right:1px solid var(--border);display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;z-index:100;
+}
+.sidebar-logo{
+  display:flex;align-items:center;gap:10px;padding:20px 20px 18px;
+  border-bottom:1px solid var(--border);
+}
+.sidebar-logo-icon{width:36px;height:36px;background:var(--blue);border-radius:9px;display:flex;align-items:center;justify-content:center;color:white;font-size:18px;}
+.sidebar-logo-text{font-size:16px;font-weight:800;letter-spacing:-.4px;}
+.sidebar-logo-text small{display:block;font-size:10px;font-weight:500;color:var(--text-3);letter-spacing:.5px;margin-top:-1px;}
+.sidebar-nav{flex:1;padding:16px 12px;overflow-y:auto;}
+.nav-section-label{font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:1px;padding:0 8px;margin-bottom:6px;margin-top:12px;}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:9px 12px;
+  border-radius:var(--radius-sm);font-size:13.5px;font-weight:500;color:var(--text-2);
+  cursor:pointer;transition:all .15s;margin-bottom:2px;
+}
+.nav-item:hover{background:var(--surface);color:var(--text-1);}
+.nav-item.active{background:var(--blue-light);color:var(--blue);font-weight:600;}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.7;}
+.nav-item.active svg{opacity:1;}
+.sidebar-footer{padding:16px 12px;border-top:1px solid var(--border);}
+.logout-btn{
+  display:flex;align-items:center;gap:10px;padding:9px 12px;
+  border-radius:var(--radius-sm);font-size:13.5px;font-weight:500;
+  color:var(--red);cursor:pointer;transition:background .15s;width:100%;
+}
+.logout-btn:hover{background:var(--red-light);}
+
+/* ─── MAIN CONTENT ───────────────────────────────────────────── */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+
+/* ─── TOPBAR ─────────────────────────────────────────────────── */
+.topbar{
+  height:var(--header-h);background:var(--white);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;position:sticky;top:0;z-index:50;
+}
+.topbar-left h1{font-size:20px;font-weight:700;letter-spacing:-.3px;}
+.topbar-left p{font-size:13px;color:var(--text-3);margin-top:1px;}
+.topbar-right{display:flex;align-items:center;gap:14px;}
+.date-badge{
+  display:flex;align-items:center;gap:7px;padding:7px 13px;
+  border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;color:var(--text-2);
+}
+.notif-btn{
+  width:36px;height:36px;border:1px solid var(--border);border-radius:var(--radius-sm);
+  display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;
+  transition:background .15s;
+}
+.notif-btn:hover{background:var(--surface);}
+.notif-badge{
+  position:absolute;top:-4px;right:-4px;width:16px;height:16px;
+  background:var(--blue);color:white;border-radius:50%;font-size:10px;
+  font-weight:700;display:flex;align-items:center;justify-content:center;
+  border:2px solid white;
+}
+.admin-profile{
+  display:flex;align-items:center;gap:9px;cursor:pointer;padding:6px 12px;
+  border:1px solid var(--border);border-radius:var(--radius-sm);position:relative;
+  transition:background .15s;
+}
+.admin-profile:hover{background:var(--surface);}
+.admin-avatar{width:30px;height:30px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;}
+.admin-name{font-size:13px;font-weight:600;}
+.admin-dropdown{
+  position:absolute;top:calc(100% + 8px);right:0;background:var(--white);
+  border:1px solid var(--border);border-radius:var(--radius-md);
+  box-shadow:var(--shadow-md);min-width:220px;z-index:200;display:none;overflow:hidden;
+}
+.admin-dropdown.open{display:block;}
+.dropdown-header{padding:14px 16px;border-bottom:1px solid var(--border);}
+.dropdown-header p{font-size:12px;color:var(--text-3);}
+.dropdown-header strong{font-size:13px;}
+.dropdown-item{
+  display:flex;align-items:center;gap:9px;padding:11px 16px;
+  font-size:13px;color:var(--text-1);cursor:pointer;transition:background .12s;
+}
+.dropdown-item:hover{background:var(--surface);}
+.dropdown-item svg{width:15px;height:15px;color:var(--text-3);}
+.dropdown-item.danger{color:var(--red);}
+.dropdown-item.danger svg{color:var(--red);}
+.dropdown-divider{border-top:1px solid var(--border);}
+
+/* ─── PAGE CONTENT ───────────────────────────────────────────── */
+.page-content{flex:1;padding:28px;display:none;}
+.page-content.active{display:block;}
+
+/* ─── STAT CARDS ─────────────────────────────────────────────── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;margin-bottom:24px;}
+.stat-card{
+  background:var(--white);border-radius:var(--radius-md);padding:20px;
+  box-shadow:var(--shadow-sm);border:1px solid var(--border);
+}
+.stat-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
+.stat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.stat-label{font-size:12px;font-weight:600;color:var(--text-3);letter-spacing:.3px;margin-bottom:4px;}
+.stat-value{font-size:24px;font-weight:800;letter-spacing:-.8px;}
+.stat-badge{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:3px 8px;border-radius:20px;margin-top:8px;}
+.stat-badge.up{color:#16a34a;background:#dcfce7;}
+.stat-badge.neutral{color:var(--text-3);background:var(--surface);}
+
+/* ─── PANELS ─────────────────────────────────────────────────── */
+.panels-row{display:grid;gap:18px;margin-bottom:24px;}
+.panels-row.col-2{grid-template-columns:1fr 1fr;}
+.panels-row.col-3{grid-template-columns:2fr 1fr 1fr;}
+.panel{background:var(--white);border-radius:var(--radius-md);border:1px solid var(--border);box-shadow:var(--shadow-sm);}
+.panel-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border);}
+.panel-title{font-size:14px;font-weight:700;}
+.panel-body{padding:20px;}
+
+/* ─── CHART WRAPPER ──────────────────────────────────────────── */
+.chart-wrap{position:relative;height:200px;}
+
+/* ─── DONUT CENTER ───────────────────────────────────────────── */
+.donut-wrap{position:relative;width:180px;height:180px;margin:0 auto;}
+
+/* ─── ORDER STATUS LEGEND ────────────────────────────────────── */
+.status-legend{display:flex;flex-direction:column;gap:10px;flex:1;}
+.legend-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;}
+.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:7px;}
+.legend-pct{color:var(--text-3);font-size:12px;}
+
+/* ─── QUICK ACTIONS ──────────────────────────────────────────── */
+.qa-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 14px;border-radius:var(--radius-sm);cursor:pointer;
+  transition:background .12s;margin-bottom:6px;
+}
+.qa-item:hover{background:var(--surface);}
+.qa-item-left{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;}
+.qa-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+
+/* ─── TABLES ─────────────────────────────────────────────────── */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+thead th{
+  font-size:11.5px;font-weight:700;color:var(--text-3);letter-spacing:.4px;
+  padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+tbody tr{transition:background .1s;}
+tbody tr:hover{background:var(--surface);}
+tbody td{
+  padding:12px 14px;font-size:13px;border-bottom:1px solid var(--border);
+  vertical-align:middle;
+}
+tbody tr:last-child td{border-bottom:none;}
+
+/* ─── BADGES ─────────────────────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
+.badge-completed,.badge-resolved{color:#16a34a;background:#dcfce7;}
+.badge-processing,.badge-in-progress{color:#d97706;background:#fef3c7;}
+.badge-pending,.badge-open{color:var(--orange);background:var(--orange-light);}
+.badge-cancelled{color:var(--red);background:var(--red-light);}
+
+/* ─── TOOLBAR ────────────────────────────────────────────────── */
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.search-input{
+  flex:1;min-width:200px;max-width:320px;display:flex;align-items:center;gap:8px;
+  border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:9px 13px;
+  background:var(--white);transition:border-color .15s;
+}
+.search-input:focus-within{border-color:var(--blue);}
+.search-input input{border:none;outline:none;font-size:13px;width:100%;background:transparent;}
+.filter-select{
+  padding:9px 13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  font-size:13px;color:var(--text-1);background:var(--white);cursor:pointer;
+}
+.filter-select:focus{outline:none;border-color:var(--blue);}
+.date-input{
+  padding:9px 13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  font-size:13px;color:var(--text-1);background:var(--white);
+}
+.date-input:focus{outline:none;border-color:var(--blue);}
+.btn{
+  padding:9px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px;
+}
+.btn-blue{background:var(--blue);color:white;}
+.btn-blue:hover{background:var(--blue-dark);}
+.btn-outline{background:white;color:var(--text-1);border:1.5px solid var(--border);}
+.btn-outline:hover{background:var(--surface);border-color:var(--border-mid);}
+.btn-danger{background:var(--red);color:white;}
+.btn-danger:hover{background:#dc2626;}
+.btn-success{background:var(--green);color:white;}
+.btn-success:hover{background:#16a34a;}
+.btn-sm{padding:6px 11px;font-size:12px;}
+
+/* ─── MODAL ──────────────────────────────────────────────────── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;
+  display:flex;align-items:center;justify-content:center;display:none;
+  backdrop-filter:blur(3px);
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--white);border-radius:var(--radius-lg);width:100%;max-width:500px;
+  max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);margin:16px;
+}
+.modal.modal-lg{max-width:680px;}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px;border-bottom:1px solid var(--border);
+}
+.modal-head h2{font-size:16px;font-weight:700;}
+.modal-close{
+  width:30px;height:30px;border-radius:6px;display:flex;align-items:center;
+  justify-content:center;cursor:pointer;transition:background .12s;font-size:18px;color:var(--text-3);
+}
+.modal-close:hover{background:var(--surface);}
+.modal-body{padding:24px;}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-row.col-1{grid-template-columns:1fr;}
+
+/* ─── PERIOD TABS ────────────────────────────────────────────── */
+.period-tabs{display:flex;gap:2px;background:var(--surface);border-radius:var(--radius-sm);padding:3px;}
+.period-tab{
+  padding:6px 14px;border-radius:6px;font-size:12.5px;font-weight:600;
+  cursor:pointer;color:var(--text-3);transition:all .15s;
+}
+.period-tab.active{background:var(--white);color:var(--text-1);box-shadow:var(--shadow-sm);}
+
+/* ─── EMPTY / LOADING / ERROR ────────────────────────────────── */
+.empty-state{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:60px 20px;color:var(--text-3);text-align:center;
+}
+.empty-state .icon{font-size:42px;margin-bottom:14px;}
+.empty-state h3{font-size:16px;font-weight:600;color:var(--text-2);margin-bottom:6px;}
+.empty-state p{font-size:13px;}
+.loading-row td{text-align:center;padding:40px;color:var(--text-3);}
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:2000;
+  background:var(--text-1);color:white;padding:12px 20px;
+  border-radius:var(--radius-sm);font-size:13.5px;font-weight:500;
+  box-shadow:var(--shadow-lg);opacity:0;transform:translateY(8px);
+  transition:all .25s;pointer-events:none;max-width:340px;
+}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.success{background:#166534;}
+.toast.error{background:#991b1b;}
+
+/* ─── PAGINATION ─────────────────────────────────────────────── */
+.pagination{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);}
+.pagination-info{font-size:13px;color:var(--text-3);}
+.pagination-btns{display:flex;gap:6px;}
+.page-btn{
+  padding:5px 11px;border:1.5px solid var(--border);border-radius:6px;font-size:12.5px;
+  cursor:pointer;transition:all .12s;background:white;
+}
+.page-btn:hover{border-color:var(--blue);color:var(--blue);}
+.page-btn.active{background:var(--blue);color:white;border-color:var(--blue);}
+.page-btn:disabled{opacity:.4;cursor:default;}
+
+/* ─── ICONS SVG ──────────────────────────────────────────────── */
+.icon-action{cursor:pointer;color:var(--text-3);transition:color .12s;padding:4px;border-radius:5px;}
+.icon-action:hover{color:var(--blue);background:var(--blue-light);}
+.icon-action.del:hover{color:var(--red);background:var(--red-light);}
+
+/* ─── TOGGLE ─────────────────────────────────────────────────── */
+.toggle{position:relative;width:40px;height:22px;cursor:pointer;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{
+  position:absolute;inset:0;background:#d1d5db;border-radius:20px;
+  transition:background .2s;
+}
+.toggle-slider:before{
+  content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;
+  background:white;border-radius:50%;transition:transform .2s;
+  box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+.toggle input:checked + .toggle-slider{background:var(--green);}
+.toggle input:checked + .toggle-slider:before{transform:translateX(18px);}
+
+/* ─── SECTION HEADER ─────────────────────────────────────────── */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.section-header h2{font-size:18px;font-weight:700;}
+
+/* ─── CHANGE PROFILE FORM ────────────────────────────────────── */
+.profile-modal .form-group{margin-bottom:16px;}
+
+
+/* GLOBAL DARK MODE - default dark, toggle to light */
+body.dark-mode{background:#05070b!important;color:#f8fafc!important}
+body.dark-mode #login-screen{background:linear-gradient(135deg,#05070b,#0b1220)!important}
+body.dark-mode .login-card{background:#0f1724!important;border-color:#263244!important;color:#f8fafc!important}
+body.dark-mode .login-sub,body.dark-mode .form-label{color:#94a3b8!important}
+body.dark-mode .form-control{background:#111827!important;color:#f8fafc!important;border-color:#334155!important}
+body.dark-mode .sidebar{background:#080c13!important;border-color:#1f2937!important}
+body.dark-mode .sidebar-logo-text,body.dark-mode .sidebar-nav .nav-item{color:#e2e8f0!important}
+body.dark-mode .nav-item:hover{background:#111827!important}
+body.dark-mode .nav-item.active{background:#1d2b4a!important;color:#60a5fa!important}
+body.dark-mode .main{background:#05070b!important}
+body.dark-mode .topbar{background:#0b0f17!important;border-color:#1f2937!important}
+body.dark-mode .topbar h1,body.dark-mode .topbar-left p,body.dark-mode .admin-name{color:#f8fafc!important}
+body.dark-mode .date-badge,body.dark-mode .notif-btn,body.dark-mode .admin-profile{background:#111827!important;color:#e2e8f0!important;border-color:#334155!important}
+body.dark-mode .page-content,body.dark-mode .panel,body.dark-mode .stat-card,body.dark-mode .table-wrap,body.dark-mode .chart-wrap,body.dark-mode .donut-wrap,.dark-mode .empty-state{background:#0f1724!important;border-color:#263244!important;color:#e2e8f0!important}
+body.dark-mode .panel-head,body.dark-mode .section-header{color:#f8fafc!important}
+body.dark-mode .panel-title,body.dark-mode .stat-label,body.dark-mode .stat-value{color:#f8fafc!important}
+body.dark-mode .stat-card .stat-badge{background:#172033!important}
+body.dark-mode .search-input,body.dark-mode .filter-select,body.dark-mode .date-input{background:#111827!important;color:#f8fafc!important;border-color:#334155!important}
+body.dark-mode table{color:#e2e8f0!important}
+body.dark-mode th{background:#111827!important;color:#94a3b8!important;border-color:#263244!important}
+body.dark-mode td{border-color:#263244!important;color:#cbd5e1!important}
+body.dark-mode tr:hover td{background:#111827!important}
+body.dark-mode .period-tabs{background:#111827!important}
+body.dark-mode .period-tab{color:#94a3b8!important}
+body.dark-mode .period-tab.active{background:#1f2937!important;color:#f8fafc!important}
+body.dark-mode .toolbar{background:#0f1724!important;border-color:#263244!important}
+body.dark-mode .btn-outline{background:#111827!important;color:#e2e8f0!important;border-color:#334155!important}
+body.dark-mode .modal-overlay{background:rgba(0,0,0,.78)!important}
+body.dark-mode .modal,.dark-mode .profile-modal{background:#0b1220!important;color:#f8fafc!important;border-color:#263244!important}
+body.dark-mode .modal-body,.dark-mode .modal-head,.dark-mode .modal-footer{border-color:#263244!important}
+body.dark-mode .dropdown-header,body.dark-mode .dropdown-item,body.dark-mode .admin-dropdown{background:#0f1724!important;color:#e2e8f0!important;border-color:#263244!important}
+body.dark-mode .dropdown-item:hover{background:#111827!important}
+body.dark-mode .toast{background:#111827!important;color:#f8fafc!important;border-color:#334155!important}
+body.dark-mode .theme-toggle{background:#111827!important;color:#f8fafc!important;border-color:#334155!important}
+
+.theme-toggle{border:1px solid var(--border);background:var(--white);color:var(--text-1);border-radius:9px;padding:9px 11px;font-weight:800;cursor:pointer;margin-right:8px}
+</style>
+<link rel="stylesheet" href="/admin/replit-admin-theme.css">
+</head>
+<body class="dark-mode">
+
+<!-- ══════════════ LOGIN SCREEN ══════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">🎓</div>
+      <div class="login-logo-text">UniCampus <span>Admin</span><small>PORTAL</small></div>
+    </div>
+    <h1 class="login-title">Welcome back</h1>
+    <p class="login-sub">Sign in to manage your campus store</p>
+    <div class="form-group">
+      <label class="form-label">Email / Username</label>
+      <input type="text" id="login-email" class="form-control" placeholder="admin" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" id="login-password" class="form-control" placeholder="••••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn-primary" id="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="form-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- ══════════════ APP SHELL ══════════════ -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">🎓</div>
+      <div class="sidebar-logo-text">Admin<small>UNICAMPUS STORE</small></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">MAIN MENU</div>
+      <div class="nav-item active" data-page="overview" onclick="navigate('overview')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Overview
+      </div>
+      <div class="nav-item" data-page="orders" onclick="navigate('orders')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Orders
+      </div>
+      <div class="nav-item" data-page="revenue" onclick="navigate('revenue')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        Revenue
+      </div>
+      <div class="nav-item" data-page="profit" onclick="navigate('profit')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Profit
+      </div>
+      <div class="nav-item" data-page="discount" onclick="navigate('discount')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+        Discount
+      </div>
+      <div class="nav-item" data-page="support" onclick="navigate('support')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Customer Support
+      </div>
+      <div class="nav-section-label" style="margin-top:16px;">CATALOGUE</div>
+      <div class="nav-item" data-page="products" onclick="navigate('products')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        Products
+      </div>
+      <a class="nav-item" href="/printing-admin" style="display:flex;align-items:center;gap:12px;text-decoration:none">
+        <span aria-hidden="true">🖨️</span>
+        Printing Operations
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="doLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1 id="page-title">Overview</h1>
+        <p id="page-sub">Welcome back, Admin! Here's what's happening.</p>
+      </div>
+      <div class="topbar-right"><button id="themeToggle" class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Switch to light mode">☀️</button>
+        <div class="date-badge">
+          📅 <span id="today-date"></span>
+        </div>
+        <div class="notif-btn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <div class="notif-badge" id="notif-count">3</div>
+        </div>
+        <div class="admin-profile" id="admin-profile-btn" onclick="toggleProfileDropdown()">
+          <div class="admin-avatar" id="admin-avatar">A</div>
+          <span class="admin-name" id="admin-email-display">Admin</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="admin-dropdown" id="admin-dropdown">
+            <div class="dropdown-header">
+              <p>Signed in as</p>
+              <strong id="dropdown-email">admin</strong>
+            </div>
+            <div class="dropdown-item" onclick="openProfileModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Change Email / Password
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item danger" onclick="doLogout()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Logout
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGES -->
+    <div id="page-overview" class="page-content active"></div>
+    <div id="page-orders" class="page-content"></div>
+    <div id="page-revenue" class="page-content"></div>
+    <div id="page-profit" class="page-content"></div>
+    <div id="page-discount" class="page-content"></div>
+    <div id="page-support" class="page-content"></div>
+    <div id="page-products" class="page-content"></div>
+  </main>
+</div>
+
+<!-- CHANGE PROFILE MODAL -->
+<div class="modal-overlay profile-modal" id="profile-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Change Email / Password</h2>
+      <div class="modal-close" onclick="closeProfileModal()">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Current Password *</label>
+        <input type="password" id="p-current" class="form-control" placeholder="Enter current password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">New Email</label>
+        <input type="text" id="p-email" class="form-control" placeholder="Leave blank to keep current">
+      </div>
+      <div class="form-group">
+        <label class="form-label">New Password</label>
+        <input type="password" id="p-new" class="form-control" placeholder="Leave blank to keep current">
+      </div>
+      <div class="form-error" id="profile-error"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeProfileModal()">Cancel</button>
+      <button class="btn btn-blue" onclick="saveProfile()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="/admin/app.js"></script>
+
+<script>
+(function(){const key='unicampus_theme';function apply(){const light=localStorage.getItem(key)==='light';document.body.classList.toggle('dark-mode',!light);const b=document.getElementById('themeToggle');if(b){b.textContent=light?'🌙':'☀️';b.title=light?'Switch to dark mode':'Switch to light mode';}}window.toggleTheme=function(){const dark=!document.body.classList.contains('dark-mode');localStorage.setItem(key,dark?'dark':'light');apply()};document.addEventListener('DOMContentLoaded',apply)})();
+</script>
+</body>
+</html>
